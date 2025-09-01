@@ -11,6 +11,7 @@ CREATE TABLE tb_books (
     published_year INT,
     publisher VARCHAR(100),
     page_count INT,
+    id_google VARCHAR(50) UNIQUE,
     created_at DATETIME
 );
 

@@ -45,6 +45,8 @@ public class Book {
 
     private Integer pageCount;
 
+    private String idGoogle;
+
     private LocalDateTime createdAt;
 
 }
