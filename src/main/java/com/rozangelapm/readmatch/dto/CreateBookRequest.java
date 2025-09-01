@@ -1,13 +1,12 @@
 package com.rozangelapm.readmatch.dto;
 
-import com.rozangelapm.readmatch.model.Genre;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-public record BookRequest(
+public record CreateBookRequest(
         @NotBlank(message = "A id do Google Books é obrigatória")
         String idGoogle,
 
