@@ -49,4 +49,7 @@ public class Book {
 
     private LocalDateTime createdAt;
 
+    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Reading reading;
+
 }
