@@ -2,6 +2,7 @@ package com.rozangelapm.readmatch.service;
 
 
 import com.rozangelapm.readmatch.dto.GoogleBookResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -9,10 +10,12 @@ import org.springframework.web.client.RestTemplate;
 public class GoogleBooksService {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private static final String API_URL = "https://www.googleapis.com/books/v1/volumes/";
+
+    @Value("${spring.google-books.url}")
+    private String apiUrl;
 
     public GoogleBookResponse getBookById(String googleId) {
-        String url = API_URL + googleId;
+        String url = apiUrl + googleId;
         return restTemplate.getForObject(url, GoogleBookResponse.class);
     }
 
