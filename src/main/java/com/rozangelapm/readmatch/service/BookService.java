@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class BookService {
@@ -23,17 +24,21 @@ public class BookService {
     private final BookRepository bookRepository;
     private final GoogleBooksService googleBooksService;
     private final GenreRepository genreRepository;
+    private final ReadingService readingService;
 
-    public BookService(BookRepository bookRepository, GoogleBooksService googleBooksService, GenreRepository genreRepository) {
+    public BookService(BookRepository bookRepository, GoogleBooksService googleBooksService,
+                       GenreRepository genreRepository, ReadingService readingService) {
         this.bookRepository = bookRepository;
         this.googleBooksService = googleBooksService;
         this.genreRepository = genreRepository;
+        this.readingService = readingService;
     }
 
     @Transactional
     public BookResponse saveBookFromGoogle(CreateBookRequest newBookDto){
 
         String idGoogle = newBookDto.idGoogle();
+        String idBook = UUID.randomUUID().toString();
 
         if(bookRepository.existsByIdGoogle(idGoogle)){
             throw new DuplicateBookException("Esse livro já foi cadastrado");
@@ -42,6 +47,7 @@ public class BookService {
         GoogleBookResponse response = getResponseGoogle(idGoogle);
 
         Book book = new Book();
+        book.setId(idBook);
         book.setTitle(response.getVolumeInfo().getTitle());
         book.setAuthor(
                 response.getVolumeInfo().getAuthors() != null ?
@@ -64,6 +70,8 @@ public class BookService {
         book.setGenres(genresEntities);
         book.setCreatedAt(LocalDateTime.now());
         book.setIdGoogle(response.getId());
+
+        book.setReading(readingService.createReading(book));
 
         Book savedBook = bookRepository.save(book);
 
@@ -107,7 +115,6 @@ public class BookService {
 
         Book book = bookRepository.findById(id).orElse(null);
         if(book == null){ return false; }
-
 
         if(bookDto.title() != null) book.setTitle(bookDto.title());
         if(bookDto.author() != null) book.setAuthor(bookDto.author());
