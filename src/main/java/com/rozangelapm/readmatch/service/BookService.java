@@ -135,7 +135,6 @@ public class BookService {
             bookRepository.deleteById(id);
             return true;
         }
-
         return false;
     }
 
