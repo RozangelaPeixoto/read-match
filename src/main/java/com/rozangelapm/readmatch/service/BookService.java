@@ -3,6 +3,7 @@ package com.rozangelapm.readmatch.service;
 import com.rozangelapm.readmatch.dto.CreateBookRequest;
 import com.rozangelapm.readmatch.dto.BookResponse;
 import com.rozangelapm.readmatch.dto.GoogleBookResponse;
+import com.rozangelapm.readmatch.dto.UpdateBookRequest;
 import com.rozangelapm.readmatch.exception.DuplicateBookException;
 import com.rozangelapm.readmatch.mapper.BookMapper;
 import com.rozangelapm.readmatch.model.Book;
@@ -11,10 +12,6 @@ import com.rozangelapm.readmatch.repository.BookRepository;
 import com.rozangelapm.readmatch.repository.GenreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.ResourceAccessException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,8 +34,6 @@ public class BookService {
     public BookResponse saveBookFromGoogle(CreateBookRequest newBookDto){
 
         String idGoogle = newBookDto.idGoogle();
-
-        System.out.println(bookRepository.existsByIdGoogle(idGoogle));
 
         if(bookRepository.existsByIdGoogle(idGoogle)){
             throw new DuplicateBookException("Esse livro já foi cadastrado");
@@ -78,9 +73,63 @@ public class BookService {
 
     private GoogleBookResponse getResponseGoogle(String idGoogle) {
 
-        GoogleBookResponse response = googleBooksService.getBookById(idGoogle);
-
-        return response;
+        return googleBooksService.getBookById(idGoogle);
 
     }
+
+    public BookResponse getBookById(String id){
+
+        Book book = bookRepository.findById(id).orElse(null);
+        if(book == null) return null;
+        return BookMapper.toDto(book);
+    }
+
+    public List<BookResponse> getAllBooks(){
+
+        List<Book> listBooks = bookRepository.findAll();
+
+        return BookMapper.toDtoList(listBooks);
+
+    }
+
+    public List<BookResponse> getAllBooksByGenre(String genreName){
+
+        Genre genre = genreRepository.findByNameIgnoreCase(genreName).orElse(null);
+
+        List<Book> listBooks = bookRepository.findByGenres(genre);
+
+        return BookMapper.toDtoList(listBooks);
+
+    }
+
+    @Transactional
+    public boolean updateBookById(String id, UpdateBookRequest bookDto){
+
+        Book book = bookRepository.findById(id).orElse(null);
+        if(book == null){ return false; }
+
+
+        if(bookDto.title() != null) book.setTitle(bookDto.title());
+        if(bookDto.author() != null) book.setAuthor(bookDto.author());
+        if(bookDto.description() != null) book.setDescription(bookDto.description());
+        if(bookDto.genres() != null) book.setGenres(bookDto.genres().stream()
+                .map(name -> genreRepository.findByNameIgnoreCase(name)
+                .orElseGet(() -> genreRepository.save(new Genre(null, name))))
+                .toList());
+        if(bookDto.publisher() != null) book.setPublisher(bookDto.publisher());
+
+        return true;
+    }
+
+    @Transactional
+    public boolean deleteBookById(String id){
+
+        if(bookRepository.existsById(id)){
+            bookRepository.deleteById(id);
+            return true;
+        }
+
+        return false;
+    }
+
 }
