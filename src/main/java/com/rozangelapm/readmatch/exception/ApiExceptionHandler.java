@@ -71,12 +71,6 @@ public class ApiExceptionHandler {
         return buildErrorResponse(ex, request, "Parâmetro inválido", true, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(DateTimeParseException.class)
-    public ResponseEntity<Map<String, Object>> handleDateTimeParse(
-            DateTimeParseException ex, HttpServletRequest request) {
-        return buildErrorResponse(ex, request, "Formato de data inválido, use: aaaa-mm-dd", false, HttpStatus.BAD_REQUEST);
-    }
-
     private ResponseEntity<Map<String, Object>> buildErrorResponse(
             Exception ex, HttpServletRequest request, String customMessage, boolean sendExtraMessage, HttpStatus status) {
 
