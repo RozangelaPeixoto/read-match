@@ -31,5 +31,5 @@ public class Reading {
     @Column(nullable = false)
     private ReadingStatus status;
 
-    private Integer rating;
+    private Double rating;
 }
