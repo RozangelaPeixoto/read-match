@@ -22,8 +22,11 @@ public class Preference {
     private Genre genre;
 
     @Column(nullable = false)
-    private Double avgRating;
+    private Double ratingSum;
 
     @Column(nullable = false)
     private Integer ratingCount;
+
+    @Column(nullable = false)
+    private Double avgRating;
 }
