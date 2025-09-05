@@ -6,13 +6,13 @@ Uma API REST para gerenciamento de livros, leituras e recomendações personaliz
 
 ## 📋 Índice
 
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Pré-requisitos](#pré-requisitos)
-- [Instalação e Execução](#instalação-e-execução)
-- [Documentação da API](#documentação-da-api)
-- [Estrutura do Banco de Dados](#estrutura-do-banco-de-dados)
-- [Exemplos de Uso](#exemplos-de-uso)
+- [Sobre o Projeto](#-sobre-o-projeto)
+- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [Pré-requisitos](#-pré-requisitos)
+- [Instalação e Execução](#-instalação-e-execução)
+- [Documentação da API](#-documentação-da-api)
+- [Estrutura do Banco de Dados](#-estrutura-do-banco-de-dados)
+- [Exemplos de Uso](#-exemplos-de-uso)
 
 ## 🎯 Sobre o Projeto
 
