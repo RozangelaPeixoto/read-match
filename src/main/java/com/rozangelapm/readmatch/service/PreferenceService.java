@@ -29,7 +29,7 @@ public class PreferenceService {
                     .orElseGet(() -> genreRepository.save(new Genre(null, name)));
 
             preferenceRepository.findByGenre(genre).orElseGet(() -> {
-                Preference p = new Preference(null, genre, 0.0, 0);
+                Preference p = new Preference(null, genre, 0.0, 0, 0.0);
                 return preferenceRepository.save(p);
             });
         }

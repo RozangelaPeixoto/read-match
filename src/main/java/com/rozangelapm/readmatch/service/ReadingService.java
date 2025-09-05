@@ -57,7 +57,7 @@ public class ReadingService {
             }else{
                 if (updateReading.rating() >= 4.0) {
                     adjustPreferencesForRatingChange(bookId, 0.0, updateReading.rating());
-                }//updatePreferencesOnRating(bookId, updateReading.rating());
+                }
             }
             reading.setRating(updateReading.rating());
         }
@@ -84,7 +84,7 @@ public class ReadingService {
             // caso 2: nota antiga >= 4 e nova < 4 (saiu do filtro)
             else if (oldRating >= 4.0 && newRating < 4.0) {
                 sum -= oldRating;
-                count -= 1;
+                count = Math.max(count - 1, 0);
             }
             // caso 3: ambas >= 4 (só atualizar soma)
             else if (oldRating >= 4.0 && newRating >= 4.0) {
@@ -97,29 +97,6 @@ public class ReadingService {
             preferenceRepository.save(pref);
         }
 
-    }
-
-    @Transactional
-    private void updatePreferencesOnRating(String bookId, double rating) {
-        if (rating < 4.0) {return;}
-
-        List<Genre> genres = bookRepository.findGenresByBookId(bookId);
-
-        for (Genre genre : genres) {
-            Preference pref = preferenceRepository.findByGenre(genre).orElseGet(() -> {
-                Preference p = new Preference(null, genre, 0.0, 0, 0.0);
-                return preferenceRepository.save(p);
-            });
-
-            double sum = pref.getRatingSum() + rating;
-            int count = pref.getRatingCount() + 1;
-
-            pref.setRatingSum(sum);
-            pref.setRatingCount(count);
-            pref.setAvgRating(sum / count);
-
-            preferenceRepository.save(pref);
-        }
     }
 
     public BookWithReadingResponse findReadingById(String id){
