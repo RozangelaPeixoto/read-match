@@ -1,6 +1,7 @@
 package com.rozangelapm.readmatch.mapper;
 
 import com.rozangelapm.readmatch.dto.BookResponse;
+import com.rozangelapm.readmatch.dto.RecommendationResponse;
 import com.rozangelapm.readmatch.model.Book;
 import com.rozangelapm.readmatch.model.Genre;
 
@@ -34,4 +35,27 @@ public class BookMapper {
         return bookList;
     }
 
+    public static RecommendationResponse toRecommendationDto(Book book){
+        return new RecommendationResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getGenres()
+                        .stream()
+                        .map(Genre::getName)
+                        .toList());
+    }
+
+    public static List<RecommendationResponse> toRecommendationDtoList(List<Book> books){
+        if (books == null) {
+            return null;
+        }
+
+        List<RecommendationResponse> bookList = new ArrayList<RecommendationResponse>(books.size());
+        for (Book book : books) {
+            bookList.add( toRecommendationDto(book) );
+        }
+
+        return bookList;
+    }
 }
