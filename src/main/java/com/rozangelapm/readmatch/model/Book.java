@@ -27,7 +27,7 @@ public class Book {
     @Column(length = 255)
     private String author;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String description;
 
     @ManyToMany
