@@ -65,6 +65,7 @@ mvn spring-boot:run
    - Password: (vazio)
 
 ## 📚 Documentação da API
+Documentação Postman: https://documenter.getpostman.com/view/39397377/2sB3Hkqfd2
 
 ### Base URL
 ```
